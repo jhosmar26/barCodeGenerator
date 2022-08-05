@@ -25,7 +25,7 @@ const textMarginLeft = 25;
 
 // IMPRESION DE LOGOS
 // let secuence = 0;
-let countToTen = 0;
+let countToTwenty = 0;
 
 function openPdf(func) {
   let doc = new jsPDF("p", "mm", [210, 330]);
@@ -35,14 +35,16 @@ function openPdf(func) {
   doc.setLineWidth(0.4);
   let counter = 0;
   const pages = 5;
+  let counterOfPages = 1;
 
   while (counter / 20 < pages) {
+    // counter / 20 < page;
     for (let heightIterator = 0; heightIterator < 4; heightIterator++) {
       for (let widthIterator = 0; widthIterator < 5; widthIterator++) {
-        counter++;
-        let stringToShow = counter.toString().padStart(9, "0");
+        let stringToShow =
+          countToTwenty.toString().padStart(7, "0") +
+          counterOfPages.toString().padStart(3, "0");
         // secuence++;
-        countToTen == 9 ? (countToTen = 1) : countToTen++;
         doc.cell(
           5 + cardWidth * widthIterator,
           4 + cardHeight * heightIterator,
@@ -53,71 +55,71 @@ function openPdf(func) {
           "align"
         );
 
-        doc.addImage(
-          "test.png",
-          "JPEG",
-          19.5 + cardWidth * widthIterator,
-          5 + cardHeight * heightIterator,
-          logoWidth,
-          logoHeight,
-          "logo"
-        );
+        // doc.addImage(
+        //   "test.png",
+        //   "JPEG",
+        //   19.5 + cardWidth * widthIterator,
+        //   5 + cardHeight * heightIterator,
+        //   logoWidth,
+        //   logoHeight,
+        //   "logo"
+        // );
 
-        doc.rect(
-          rectMarginLeft + cardWidth * widthIterator,
-          rectMarginTop + cardHeight * heightIterator,
-          rectWidth,
-          rectHeight
-        );
-        doc.rect(
-          rectMarginLeft + cardWidth * widthIterator,
-          rectMarginTop + 11 + cardHeight * heightIterator,
-          rectWidth,
-          rectHeight
-        );
-        doc.rect(
-          rectMarginLeft + cardWidth * widthIterator,
-          rectMarginTop + 22 + cardHeight * heightIterator,
-          rectWidth,
-          rectHeight
-        );
-        doc.rect(
-          rectMarginLeft + cardWidth * widthIterator,
-          rectMarginTop + 33 + cardHeight * heightIterator,
-          rectWidth,
-          rectHeight
-        );
+        // doc.rect(
+        //   rectMarginLeft + cardWidth * widthIterator,
+        //   rectMarginTop + cardHeight * heightIterator,
+        //   rectWidth,
+        //   rectHeight
+        // );
+        // doc.rect(
+        //   rectMarginLeft + cardWidth * widthIterator,
+        //   rectMarginTop + 11 + cardHeight * heightIterator,
+        //   rectWidth,
+        //   rectHeight
+        // );
+        // doc.rect(
+        //   rectMarginLeft + cardWidth * widthIterator,
+        //   rectMarginTop + 22 + cardHeight * heightIterator,
+        //   rectWidth,
+        //   rectHeight
+        // );
+        // doc.rect(
+        //   rectMarginLeft + cardWidth * widthIterator,
+        //   rectMarginTop + 33 + cardHeight * heightIterator,
+        //   rectWidth,
+        //   rectHeight
+        // );
 
-        doc.text(
-          "Operador",
-          textMarginLeft + cardWidth * widthIterator,
-          textMarginTop + cardHeight * heightIterator,
-          { align: "center" }
-        );
-        doc.text(
-          "Conteos",
-          textMarginLeft + cardWidth * widthIterator,
-          textMarginTop + 11 + cardHeight * heightIterator,
-          {
-            align: "center",
-          }
-        );
-        doc.text(
-          "Total",
-          textMarginLeft + cardWidth * widthIterator,
-          textMarginTop + 22 + cardHeight * heightIterator,
-          {
-            align: "center",
-          }
-        );
-        doc.text(
-          "Validación",
-          textMarginLeft + cardWidth * widthIterator,
-          textMarginTop + 33 + cardHeight * heightIterator,
-          {
-            align: "center",
-          }
-        );
+        // doc.text(
+        //   "Operador",
+        //   textMarginLeft + cardWidth * widthIterator,
+        //   textMarginTop + cardHeight * heightIterator,
+        //   { align: "center" }
+        // );
+        // doc.text(
+        //   "Conteos",
+        //   textMarginLeft + cardWidth * widthIterator,
+        //   textMarginTop + 11 + cardHeight * heightIterator,
+        //   {
+        //     align: "center",
+        //   }
+        // );
+        // doc.text(
+        //   "Total",
+        //   textMarginLeft + cardWidth * widthIterator,
+        //   textMarginTop + 22 + cardHeight * heightIterator,
+        //   {
+        //     align: "center",
+        //   }
+        // );
+        // doc.text(
+        //   "Validación",
+        //   textMarginLeft + cardWidth * widthIterator,
+        //   textMarginTop + 33 + cardHeight * heightIterator,
+        //   {
+        //     align: "center",
+        //   }
+        // );
 
         let img = createBarcode(
           func,
@@ -131,6 +133,9 @@ function openPdf(func) {
           35,
           17
         );
+        countToTwenty == 19
+          ? ((countToTwenty = 0), counterOfPages++)
+          : countToTwenty++;
 
         // doc.text(
         //   `SECUENCIA Nº ${counter}`,
@@ -140,6 +145,7 @@ function openPdf(func) {
         //     align: "center",
         //   }
         // );
+        counter++;
       }
     }
     doc.setDrawColor("#ffffff");

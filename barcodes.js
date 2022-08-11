@@ -2,8 +2,10 @@ require(JsBarcode, (result) => (JsBarcode = result));
 import { jsPDF } from "jspdf";
 
 let pdfButton = document.getElementById("pdfButton");
+let pdfButtonLast = document.getElementById("pdfButtonLast");
 const func = JsBarcode;
 pdfButton.addEventListener("click", () => openPdf(func));
+pdfButtonLast.addEventListener("click", () => openPdfLast(func));
 
 // TAMAÑO DE CARDS
 const cardWidth = 40;
@@ -28,32 +30,34 @@ const textMarginLeft = 25;
 let countToTwenty = 0;
 
 function openPdf(func) {
-  let doc = new jsPDF("p", "mm", [210, 330]);
+  let doc = new jsPDF("p", "mm", [210, 335]);
 
   // TAMAÑOS OFICIALES
   doc.setFontSize(6);
   doc.setLineWidth(0.4);
   let counter = 0;
-  const pages = 5;
-  let counterOfPages = 1;
+  const pages = 249;
+  let counterOfPages = 751;
 
   while (counter / 20 < pages) {
+    doc.line(0,2.5,2.5,2.5)
+    doc.line(207.5,2.5,210,2.5)
     // counter / 20 < page;
     for (let heightIterator = 0; heightIterator < 4; heightIterator++) {
       for (let widthIterator = 0; widthIterator < 5; widthIterator++) {
         let stringToShow =
-          countToTwenty.toString().padStart(7, "0") +
+          countToTwenty.toString().padStart(6, "0") +
           counterOfPages.toString().padStart(3, "0");
         // secuence++;
-        doc.cell(
-          5 + cardWidth * widthIterator,
-          4 + cardHeight * heightIterator,
-          cardWidth,
-          cardHeight,
-          " ",
-          heightIterator,
-          "align"
-        );
+        // doc.cell(
+        //   7 + cardWidth * widthIterator,
+        //   2.5 + cardHeight * heightIterator,
+        //   cardWidth,
+        //   cardHeight,
+        //   " ",
+        //   heightIterator,
+        //   "align"
+        // );
 
         // doc.addImage(
         //   "test.png",
@@ -123,13 +127,13 @@ function openPdf(func) {
 
         let img = createBarcode(
           func,
-          `001` + stringToShow + random_number(stringToShow),
-          stringToShow + `-${random_number(stringToShow)}`
+          `001` + stringToShow + random_number("001"+stringToShow),
+          stringToShow + `-${random_number("001"+stringToShow)}`
         );
         doc.addImage(
           img,
-          7.5 + cardWidth * widthIterator,
-          60 + cardHeight * heightIterator,
+          9.5 + cardWidth * widthIterator,
+          56.5 + cardHeight * heightIterator,
           35,
           17
         );
@@ -148,14 +152,64 @@ function openPdf(func) {
         counter++;
       }
     }
-    doc.setDrawColor("#ffffff");
-    doc.cell(1, 1, 1, 5, " ", 1, "align");
-    doc.cell(1, 1, 1, 4, " ", 2, "align");
-    doc.setDrawColor("#000000");
+    if (counter / 20 == pages) {
+    } else {
+      doc.addPage();
+    }
+
+    // doc.setDrawColor("#ffffff");
+    // doc.cell(1, 1, 1, 5, " ", 1, "align");
+    // doc.cell(1, 1, 1, 4, " ", 2, "align");
+    // doc.setDrawColor("#000000");
   }
 
   window.open(URL.createObjectURL(doc.output("blob")));
 }
+
+function openPdfLast(func) {
+  let doc = new jsPDF("p", "mm", [210, 335]);
+
+  // TAMAÑOS OFICIALES
+  doc.setFontSize(6);
+  doc.setLineWidth(0.4);
+  let iteratorFinalPdf = 1;
+
+  doc.line(0,4,5,4)
+  doc.line(205,4,210,4)
+  for (let heightIterator = 0; heightIterator < 4; heightIterator++) {
+    for (let widthIterator = 0; widthIterator < 5; widthIterator++) {
+      let stringToShow = iteratorFinalPdf.toString().padStart(2, "0").slice(-2);
+      let img = createBarcode(
+        func,
+        "0010 000" +
+          stringToShow +
+          "000" +
+          random_number("0010000" + stringToShow + "000"),
+        "0000" +
+          stringToShow +
+          "000" +
+          `-${random_number("0010000" + stringToShow + "000")}`
+      );
+      doc.addImage(
+        img,
+        9.5 + cardWidth * widthIterator,
+        56.5 + cardHeight * heightIterator,
+        35,
+        17
+      );
+
+      iteratorFinalPdf == 19 ? (iteratorFinalPdf = 0) : iteratorFinalPdf++;
+    }
+  }
+  let img = createBarcode(
+    func,
+    "001000020000" + random_number("001000020000"),
+    "000020000" + `-${random_number("001000020000")}`
+  );
+  doc.addImage(img, 9.2 + cardWidth * 4, 56.7 + cardHeight * 3, 35, 17);
+  window.open(URL.createObjectURL(doc.output("blob")));
+}
+
 
 function createBarcode(func, hiddenCode, showedCode) {
   let canvas = document.createElement("canvas");

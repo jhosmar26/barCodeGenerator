@@ -36,8 +36,8 @@ function openPdf(func) {
   doc.setFontSize(6);
   doc.setLineWidth(0.4);
   let counter = 0;
-  const pages = 249;
-  let counterOfPages = 751;
+  const pages = 250;
+  let counterOfPages = 1;
 
   while (counter / 20 < pages) {
     doc.line(0,2.5,2.5,2.5)
@@ -46,7 +46,7 @@ function openPdf(func) {
     for (let heightIterator = 0; heightIterator < 4; heightIterator++) {
       for (let widthIterator = 0; widthIterator < 5; widthIterator++) {
         let stringToShow =
-          countToTwenty.toString().padStart(6, "0") +
+          countToTwenty.toString().padStart(7, "0") +
           counterOfPages.toString().padStart(3, "0");
         // secuence++;
         // doc.cell(
@@ -127,8 +127,8 @@ function openPdf(func) {
 
         let img = createBarcode(
           func,
-          `001` + stringToShow + random_number("001"+stringToShow),
-          stringToShow + `-${random_number("001"+stringToShow)}`
+          `001` + stringToShow + random_number(stringToShow),
+          stringToShow + `-${random_number(stringToShow)}`
         );
         doc.addImage(
           img,
@@ -184,11 +184,11 @@ function openPdfLast(func) {
         "0010 000" +
           stringToShow +
           "000" +
-          random_number("0010000" + stringToShow + "000"),
-        "0000" +
+          random_number("00000" + stringToShow + "000"),
+        "00000" +
           stringToShow +
           "000" +
-          `-${random_number("0010000" + stringToShow + "000")}`
+          `-${random_number("00000" + stringToShow + "000")}`
       );
       doc.addImage(
         img,
@@ -203,8 +203,8 @@ function openPdfLast(func) {
   }
   let img = createBarcode(
     func,
-    "001000020000" + random_number("001000020000"),
-    "000020000" + `-${random_number("001000020000")}`
+    "0010000020000" + random_number("0000020000"),
+    "0000020000" + `-${random_number("0000020000")}`
   );
   doc.addImage(img, 9.2 + cardWidth * 4, 56.7 + cardHeight * 3, 35, 17);
   window.open(URL.createObjectURL(doc.output("blob")));
@@ -225,10 +225,24 @@ function createBarcode(func, hiddenCode, showedCode) {
 }
 
 function random_number(n) {
-  let number = n.split("").reduce((partialSum, e, indx) => {
-    let a = Number.parseInt(e);
-    let c = indx % 2 === 0 ? a * 1 : a * 3;
-    return partialSum + c;
-  }, 0);
-  return String(10 - (number % 10)).slice(-1);
+	let xNumber = [ 2, 3, 4, 5, 6, 7, 2, 3, 4, 5]
+
+	let number = n.split("").reverse().reduce((partialSum, e, indx) => {
+		let n = Number.parseInt(e);
+		let x = xNumber[indx]
+
+		let c = n * x;
+		return partialSum + c;
+	}, 0);
+	let result = 11 - (number - Math.trunc(number/11) * 11)
+	let resultString = result.toString()
+
+	if (resultString === "11") {
+		return "0"
+	} else if (resultString === "10") {
+		return "k"
+	}else{
+		return resultString
+	}
+
 }

@@ -27,7 +27,7 @@ const textMarginLeft = 25;
 
 // IMPRESION DE LOGOS
 // let secuence = 0;
-let countToTwenty = 0;
+let countToTwenty = 20;
 
 function openPdf(func) {
   let doc = new jsPDF("p", "mm", [210, 335]);
@@ -36,8 +36,8 @@ function openPdf(func) {
   doc.setFontSize(6);
   doc.setLineWidth(0.4);
   let counter = 0;
-  const pages = 250;
-  let counterOfPages = 1;
+  const pages = 249;
+  let counterOfPages = 751;
 
   while (counter / 20 < pages) {
     doc.line(0,2.5,2.5,2.5)
@@ -48,6 +48,8 @@ function openPdf(func) {
         let stringToShow =
           countToTwenty.toString().padStart(7, "0") +
           counterOfPages.toString().padStart(3, "0");
+        // let stringToShow =
+        //   countToTwenty.toString().padStart(7, "0")
         // secuence++;
         // doc.cell(
         //   7 + cardWidth * widthIterator,
@@ -127,7 +129,7 @@ function openPdf(func) {
 
         let img = createBarcode(
           func,
-          `001` + stringToShow + random_number(stringToShow),
+          `002` + stringToShow + random_number(stringToShow),
           stringToShow + `-${random_number(stringToShow)}`
         );
         doc.addImage(
@@ -137,8 +139,8 @@ function openPdf(func) {
           35,
           17
         );
-        countToTwenty == 19
-          ? ((countToTwenty = 0), counterOfPages++)
+        countToTwenty == 39
+          ? ((countToTwenty = 20), counterOfPages++)
           : countToTwenty++;
 
         // doc.text(
@@ -172,7 +174,7 @@ function openPdfLast(func) {
   // TAMAÑOS OFICIALES
   doc.setFontSize(6);
   doc.setLineWidth(0.4);
-  let iteratorFinalPdf = 1;
+  let iteratorFinalPdf = 21;
 
   doc.line(0,4,5,4)
   doc.line(205,4,210,4)
@@ -181,7 +183,7 @@ function openPdfLast(func) {
       let stringToShow = iteratorFinalPdf.toString().padStart(2, "0").slice(-2);
       let img = createBarcode(
         func,
-        "0010 000" +
+        "0020 000" +
           stringToShow +
           "000" +
           random_number("00000" + stringToShow + "000"),
@@ -203,8 +205,8 @@ function openPdfLast(func) {
   }
   let img = createBarcode(
     func,
-    "0010000020000" + random_number("0000020000"),
-    "0000020000" + `-${random_number("0000020000")}`
+    "0020000040000" + random_number("0000040000"),
+    "0000040000" + `-${random_number("0000040000")}`
   );
   doc.addImage(img, 9.2 + cardWidth * 4, 56.7 + cardHeight * 3, 35, 17);
   window.open(URL.createObjectURL(doc.output("blob")));
